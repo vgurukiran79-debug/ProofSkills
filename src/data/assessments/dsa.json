@@ -1,0 +1,143 @@
+{
+  "id": "assessment-dsa",
+  "title": "Data Structures & Algorithmic Complexity",
+  "skillName": "Data Structures and Algorithms",
+  "category": "Data Structures and Algorithms",
+  "durationMinutes": 15,
+  "passingScore": 70,
+  "difficulty": "Advanced",
+  "description": "Validates computational Big-O complexity, amortized array growth, balanced trees, shortest path graphs, and dynamic programming.",
+  "topicsCovered": ["Asymptotic Analysis", "Balanced Trees & Heaps", "Graph Traversal & DAGs", "Dynamic Programming", "Disjoint Sets & Shortest Path"],
+  "questions": [
+    {
+      "id": "dsa-q1",
+      "question": "Why does a dynamically resizing array (e.g. std::vector or ArrayList) achieve amortized O(1) insertion time when doubling capacity?",
+      "options": [
+        "Because copying elements to a new array takes O(1) hardware time.",
+        "The costly O(N) reallocation occurs exponentially less frequently, spreading the reallocation overhead evenly across N insertions.",
+        "The array allocates virtual memory pages without executing memory copies.",
+        "Compilers optimize dynamic arrays into linked lists behind the scenes."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Doubling size means copying takes 1 + 2 + 4 + ... + N = 2N operations across N insertions. Total operations / N = constant, yielding an amortized time of O(1) per append.",
+      "category": "Amortized Analysis"
+    },
+    {
+      "id": "dsa-q2",
+      "question": "What is the primary architectural trade-off between an AVL Tree and a Red-Black Tree?",
+      "options": [
+        "AVL trees support duplicate keys; Red-Black trees strictly disallow them.",
+        "AVL trees are more rigidly balanced (height diff <= 1), yielding faster O(log N) lookups but requiring more rotations during frequent insertions and deletions than Red-Black trees.",
+        "Red-Black trees require O(N) space per node for color bits.",
+        "AVL trees can only be traversed using post-order recursion."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "AVL trees maintain strict height balance (|hL - hR| <= 1), providing faster lookups for read-heavy workloads. Red-Black trees tolerate slightly deeper branches (max height 2 log2(N+1)), requiring at most 2 or 3 rotations per mutation.",
+      "category": "Balanced Search Trees"
+    },
+    {
+      "id": "dsa-q3",
+      "question": "When finding the shortest path in a graph with non-negative edge weights, what is the time complexity of Dijkstra's algorithm implemented with a Binary Min-Heap?",
+      "options": [
+        "O(V^2)",
+        "O((V + E) log V)",
+        "O(V * E)",
+        "O(V log E + E^2)"
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "With a binary heap, each vertex extraction takes O(log V) for V vertices. Each edge relaxation can trigger a heap decrease-key operation in O(log V) for E edges, yielding O((V + E) log V).",
+      "category": "Graph Algorithms"
+    },
+    {
+      "id": "dsa-q4",
+      "question": "Which dynamic programming optimization reduces the time complexity of finding the Longest Increasing Subsequence (LIS) of an array of length N from O(N^2) to O(N log N)?",
+      "options": [
+        "Matrix exponentiation on the adjacency list.",
+        "Patience sorting maintaining an array of smallest tail elements and using Binary Search (bisection).",
+        "Converting the array into a minimum heap.",
+        "Applying the Knapsack recursive memoization equation."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Maintaining an array 'tails' where tails[i] stores the smallest tail of all increasing subsequences of length i+1 allows updating or appending candidates in O(log N) using binary search.",
+      "category": "Dynamic Programming"
+    },
+    {
+      "id": "dsa-q5",
+      "question": "What data structure pair provides optimal O(1) median retrieval and O(log N) insertion for an unbounded live data stream?",
+      "options": [
+        "A single sorted dynamic circular array.",
+        "Two Heaps: A Max-Heap for the lower half and a Min-Heap for the upper half.",
+        "A FIFO queue and a LIFO stack.",
+        "A Bloom filter paired with a hash table."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Balancing sizes between a max-heap (storing elements <= median) and a min-heap (storing elements >= median) keeps the median directly accessible at the heap roots in O(1) time.",
+      "category": "Heaps & Priority Queues"
+    },
+    {
+      "id": "dsa-q6",
+      "question": "What is the worst-case time complexity of Kahn's Algorithm (in-degree queue) for Topological Sorting on a Directed Acyclic Graph with V vertices and E edges?",
+      "options": [
+        "O(V + E)",
+        "O(V * E)",
+        "O(V^2)",
+        "O(E log V)"
+      ],
+      "correctOptionIndex": 0,
+      "explanation": "Kahn's algorithm initializes in-degrees in O(V + E), pushes zero in-degree nodes into a queue, and processes each vertex and edge exactly once, completing in linear O(V + E) time.",
+      "category": "Topological Sorting"
+    },
+    {
+      "id": "dsa-q7",
+      "question": "What is the amortized per-operation time complexity of Disjoint Set Union (Union-Find) with both Path Compression and Union by Rank?",
+      "options": [
+        "O(log N)",
+        "O(alpha(N)), where alpha is the inverse Ackermann function (practically <= 4).",
+        "O(N)",
+        "O(N log N)"
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Path compression flattens tree depths during find operations, while union by rank keeps subtrees shallow. Together, they achieve near-constant amortized time O(alpha(N)) per operation.",
+      "category": "Disjoint Sets"
+    },
+    {
+      "id": "dsa-q8",
+      "question": "In Hash Table design, what phenomenon describes clustering in Open Addressing with Linear Probing?",
+      "options": [
+        "Primary Clustering: Contiguous occupied bucket runs grow longer, increasing average collision probe sequences.",
+        "Garbage collection fragmentation in external pointer arrays.",
+        "Integer overflow during modular division.",
+        "Bucket starvation where only odd-indexed slots are populated."
+      ],
+      "correctOptionIndex": 0,
+      "explanation": "Linear probing checks bucket (hash + i) % m. Adjacent occupied slots merge into continuous clusters, drastically increasing probe counts for any key hashing into that cluster.",
+      "category": "Hashing"
+    },
+    {
+      "id": "dsa-q9",
+      "question": "Why does standard Quicksort exhibit an O(N^2) worst-case time complexity, and how is it mitigated in production libraries (e.g. Introsort)?",
+      "options": [
+        "Memory allocation failures; mitigated by allocating extra swap buffers.",
+        "Unbalanced partition splits (e.g. picking minimum or maximum as pivot on sorted inputs); mitigated by Median-of-Three pivot selection and falling back to Heapsort when recursion depth exceeds threshold.",
+        "Cache misses on large arrays; mitigated by multi-threading.",
+        "Stack frame overflows; mitigated by converting all loops to goto statements."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Skewed partitions (size 1 and N-1) yield quadratic recurrence. Introsort starts with Quicksort for speed, uses Median-of-Three pivots, and monitors call stack depth, switching to O(N log N) Heapsort if depth exceeds 2 * log(N).",
+      "category": "Sorting Algorithms"
+    },
+    {
+      "id": "dsa-q10",
+      "question": "Which algorithm finds the Minimum Spanning Tree (MST) of a connected, undirected weighted graph by sorting all edges and greedily uniting non-cyclic components?",
+      "options": [
+        "Floyd-Warshall Algorithm",
+        "Kruskal's Algorithm",
+        "Kosaraju's Algorithm",
+        "Tarjan's Strongly Connected Components Algorithm"
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Kruskal's algorithm sorts all edges by weight in O(E log E) time, then iterates through them, using Disjoint Set Union (DSU) to add edges that connect disconnected trees without forming cycles.",
+      "category": "Minimum Spanning Tree"
+    }
+  ]
+}

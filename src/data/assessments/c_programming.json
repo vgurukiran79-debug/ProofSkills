@@ -1,0 +1,146 @@
+{
+  "id": "assessment-c-programming",
+  "title": "C Systems Programming & Memory Mechanics",
+  "skillName": "C Programming",
+  "category": "C Programming",
+  "durationMinutes": 15,
+  "passingScore": 70,
+  "difficulty": "Advanced",
+  "description": "Examines raw memory addressing, pointer arithmetic, struct memory alignment, preprocessor macros, and undefined behaviors.",
+  "topicsCovered": ["Pointer Arithmetic", "Dynamic Allocation & Heap", "Struct Padding & Alignment", "Macros & Preprocessor", "Function Pointers & Callbacks"],
+  "questions": [
+    {
+      "id": "c-q1",
+      "question": "What is the key functional difference between malloc() and calloc() in standard C library <stdlib.h>?",
+      "options": [
+        "malloc() allocates memory on the Stack, whereas calloc() allocates on the Heap.",
+        "calloc() zero-initializes all allocated bytes, while malloc() leaves allocated memory uninitialized (garbage values).",
+        "malloc() automatically resizes memory buffers when written past the capacity boundary.",
+        "calloc() cannot be freed with the standard free() function."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "malloc(size) allocates an uninitialized memory block containing undefined bytes. calloc(num, size) calculates total allocation size with overflow safety and zeroes out all allocated memory.",
+      "category": "Dynamic Memory"
+    },
+    {
+      "id": "c-q2",
+      "question": "What is the output of the macro expansion in the following C snippet?",
+      "codeSnippet": "#include <stdio.h>\n#define SQUARE(x) x * x\n\nint main() {\n    int result = SQUARE(2 + 3);\n    printf(\"%d\\n\", result);\n    return 0;\n}",
+      "options": [
+        "25",
+        "11",
+        "16",
+        "Compilation error due to invalid macro argument"
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "C preprocessor macros perform raw textual substitution before compilation. SQUARE(2 + 3) expands directly to '2 + 3 * 2 + 3'. Due to multiplication precedence, 3 * 2 = 6, yielding 2 + 6 + 3 = 11.",
+      "category": "Preprocessor Macros"
+    },
+    {
+      "id": "c-q3",
+      "question": "What is the difference between 'const int *p' and 'int * const p'?",
+      "options": [
+        "Both represent identical compile-time guarantees.",
+        "'const int *p' is a pointer to constant integer (data cannot be changed through p); 'int * const p' is a constant pointer (the pointer address itself cannot be changed).",
+        "'int * const p' protects the data from modification, while 'const int *p' allows modifying both.",
+        "'const int *p' cannot be passed as a function argument."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Read from right to left: 'const int *p' is a pointer to a const int (*p cannot be modified). 'int * const p' is a const pointer to an int (p cannot point to any other address).",
+      "category": "Pointers & Const Correctness"
+    },
+    {
+      "id": "c-q4",
+      "question": "On a standard 64-bit architecture with 4-byte int and 8-byte pointer alignment, what is the typical sizeof(struct Node)?",
+      "codeSnippet": "struct Node {\n    char a;       // 1 byte\n    int b;        // 4 bytes\n    char c;       // 1 byte\n};",
+      "options": [
+        "6 bytes",
+        "8 bytes",
+        "12 bytes",
+        "16 bytes"
+      ],
+      "correctOptionIndex": 2,
+      "explanation": "CPUs require data alignment for efficient bus access. 'a' takes 1 byte + 3 padding bytes to align 'b' at offset 4. 'b' takes 4 bytes. 'c' takes 1 byte + 3 trailing padding bytes so the struct's total size is a multiple of its largest member alignment (4), resulting in 12 bytes.",
+      "category": "Memory Alignment & Padding"
+    },
+    {
+      "id": "c-q5",
+      "question": "Which of the following operations in C exhibits Undefined Behavior (UB)?",
+      "options": [
+        "Casting an unsigned int to a signed int when value fits within range.",
+        "Attempting to modify a string literal: char *s = \"hello\"; s[0] = 'H';",
+        "Right-shifting an unsigned integer by 2 bits.",
+        "Allocating zero bytes via malloc(0)."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "String literals are placed in read-only data segments (.rodata) by modern compilers/linkers. Attempting to write to a string literal invokes Undefined Behavior, typically triggering a SIGSEGV segmentation fault.",
+      "category": "Undefined Behavior"
+    },
+    {
+      "id": "c-q6",
+      "question": "What does declaring a variable 'static' inside a function do in C?",
+      "codeSnippet": "void counter() {\n    static int count = 0;\n    count++;\n    printf(\"%d \", count);\n}",
+      "options": [
+        "It prevents other threads from modifying the variable.",
+        "It retains its value across multiple function calls and persists for the entire program runtime in the data segment.",
+        "It resets to 0 every time the function is called.",
+        "It allocates the variable in CPU cache registers."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "A local static variable is allocated in the static data segment (BSS/Data) rather than the call stack frame, retaining its modified value between successive function invocations.",
+      "category": "Storage Classes"
+    },
+    {
+      "id": "c-q7",
+      "question": "Which bitwise expression evaluates to true (non-zero) if and only if positive integer n is a power of 2?",
+      "options": [
+        "(n | (n - 1)) == 0",
+        "(n & (n - 1)) == 0",
+        "(n ^ (n + 1)) == 0",
+        "~n == 0"
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "A power of 2 has exactly one binary bit set (e.g. 8 is 1000b). (n - 1) flips that bit and sets all lower bits (7 is 0111b). Bitwise ANDing them produces 0. For any non-power of 2, higher bits remain, yielding non-zero.",
+      "category": "Bit Manipulation"
+    },
+    {
+      "id": "c-q8",
+      "question": "How is a function pointer declared in C that takes two 'const void*' arguments and returns an int (such as for qsort)?",
+      "options": [
+        "int *compare(const void*, const void*)",
+        "int (*compare)(const void*, const void*)",
+        "void compare(int, const void*, const void*)",
+        "function<int(void*, void*)> compare"
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Parentheses around (*compare) are required due to operator precedence. 'int (*compare)(...)' declares a pointer to a function; 'int *compare(...)' would declare a function returning an int pointer.",
+      "category": "Function Pointers"
+    },
+    {
+      "id": "c-q9",
+      "question": "In pointer arithmetic, if 'int *ptr' points to address 0x1000 on an architecture where sizeof(int) is 4 bytes, what address does 'ptr + 3' evaluate to?",
+      "options": [
+        "0x1003",
+        "0x1006",
+        "0x100C",
+        "0x1012"
+      ],
+      "correctOptionIndex": 2,
+      "explanation": "Pointer arithmetic scales offsets by sizeof(*ptr). Adding 3 increments the address by 3 * 4 = 12 bytes. 0x1000 + 12 (0x0C in hexadecimal) equals 0x100C.",
+      "category": "Pointer Arithmetic"
+    },
+    {
+      "id": "c-q10",
+      "question": "Why is the 'volatile' qualifier essential when accessing memory-mapped hardware registers in embedded C programming?",
+      "options": [
+        "It locks the register so multiple interrupts cannot access it.",
+        "It instructs the compiler not to optimize away or cache memory reads/writes to registers, forcing a reload from memory on every access.",
+        "It converts 32-bit registers into 64-bit registers.",
+        "It automatically initializes hardware peripherals on boot."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Without volatile, an optimizing compiler may assume memory cannot change externally, caching register values in CPU registers or omitting seemingly redundant writes. 'volatile' ensures every read/write produces an actual hardware bus cycle.",
+      "category": "Embedded Systems"
+    }
+  ]
+}

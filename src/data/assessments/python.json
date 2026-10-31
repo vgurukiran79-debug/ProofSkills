@@ -1,0 +1,149 @@
+{
+  "id": "assessment-python",
+  "title": "Python Engineering & Core Mastery",
+  "skillName": "Python",
+  "category": "Python",
+  "durationMinutes": 15,
+  "passingScore": 70,
+  "difficulty": "Intermediate",
+  "description": "Verifies Python memory management, mutable default traps, decorators, generator pipelines, and OOP object model.",
+  "topicsCovered": ["Memory & Internals", "Decorators", "Generators", "OOP & Dunder Methods", "GIL & Concurrency"],
+  "questions": [
+    {
+      "id": "py-q1",
+      "question": "What is the output of the following Python function when called consecutively?",
+      "codeSnippet": "def append_item(val, container=[]):\n    container.append(val)\n    return container\n\nprint(append_item(1))\nprint(append_item(2))",
+      "options": [
+        "[1] and [2]",
+        "[1] and [1, 2]",
+        "[1, 2] and [1, 2]",
+        "Raises an UnboundLocalError on the second call"
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Default arguments in Python are evaluated once when the function definition is executed, not at each call. Because lists are mutable, subsequent invocations mutate the identical object.",
+      "category": "Python Fundamentals"
+    },
+    {
+      "id": "py-q2",
+      "question": "Which statement accurately describes the difference between the 'is' operator and the '==' operator in Python?",
+      "options": [
+        "'is' compares object values and equality, while '==' compares data types.",
+        "'is' checks identity by comparing memory addresses (id()), whereas '==' checks value equality using __eq__().",
+        "'is' is only valid for boolean expressions, whereas '==' works on primitives.",
+        "'==' checks whether two variables reference the exact same memory pointer in the heap."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "The 'is' keyword tests object identity (whether two references point to the exact same object in memory, equivalent to id(a) == id(b)), while '==' invokes the __eq__ method to compare values.",
+      "category": "Python Internals"
+    },
+    {
+      "id": "py-q3",
+      "question": "Why is functools.wraps used when defining Python decorators?",
+      "codeSnippet": "from functools import wraps\n\ndef my_decorator(f):\n    @wraps(f)\n    def wrapper(*args, **kwargs):\n        return f(*args, **kwargs)\n    return wrapper",
+      "options": [
+        "It prevents infinite recursion when the decorated function calls itself.",
+        "It speeds up execution by compiling Python bytecode into C extensions.",
+        "It preserves the original function's metadata, such as __name__, __doc__, and type annotations.",
+        "It automatically enforces type checks on all keyword arguments."
+      ],
+      "correctOptionIndex": 2,
+      "explanation": "Without @wraps, the decorated function's name (__name__) and docstring (__doc__) would be overridden by the wrapper function's metadata, impeding debugging, logging, and documentation tools.",
+      "category": "Decorators & Metaprogramming"
+    },
+    {
+      "id": "py-q4",
+      "question": "What happens when using a generator expression instead of a list comprehension?",
+      "codeSnippet": "gen = (x * 2 for x in range(1_000_000))\nlst = [x * 2 for x in range(1_000_000)]",
+      "options": [
+        "The generator produces values lazily on-demand, consuming minimal and constant O(1) memory.",
+        "The list comprehension evaluates faster because it bypasses Python's iteration protocol.",
+        "The generator pre-allocates an array in memory and caches all computed results.",
+        "The generator can only be iterated over backwards using reversed()."
+      ],
+      "correctOptionIndex": 0,
+      "explanation": "Generators adhere to Python's iterator protocol, calculating items lazily one at a time via yield. This allows processing massive datasets without allocating memory for the entire list.",
+      "category": "Memory & Performance"
+    },
+    {
+      "id": "py-q5",
+      "question": "What is the primary architectural purpose of the Global Interpreter Lock (GIL) in CPython?",
+      "options": [
+        "To prevent multiple processes from reading the same database connection.",
+        "To synchronize thread execution so only one native thread executes Python bytecode at a time, ensuring memory safety with reference counting.",
+        "To lock global variable mutations in nested modules.",
+        "To stop asynchronous coroutines from blocking CPU cores."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "CPython uses reference counting for garbage collection. The GIL ensures thread-safe memory management by allowing only one native OS thread to execute Python bytecode at any moment.",
+      "category": "Concurrency & GIL"
+    },
+    {
+      "id": "py-q6",
+      "question": "What benefit does defining __slots__ in a Python class provide?",
+      "codeSnippet": "class Point:\n    __slots__ = ('x', 'y')\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y",
+      "options": [
+        "It allows instances to automatically serialize to JSON without external libraries.",
+        "It prevents instances from creating a dynamic __dict__, drastically reducing per-instance memory overhead.",
+        "It makes the class thread-safe without requiring threading.Lock.",
+        "It enables multiple inheritance from incompatible base classes."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "__slots__ eliminates the default dynamic dictionary (__dict__) used to store instance attributes, saving significant memory when instantiating millions of small objects.",
+      "category": "OOP & Optimization"
+    },
+    {
+      "id": "py-q7",
+      "question": "In a Python context manager implemented as a class, which method handles exceptions raised inside the 'with' block?",
+      "options": [
+        "__cleanup__()",
+        "__catch__()",
+        "__exit__(self, exc_type, exc_val, exc_tb)",
+        "__close__()"
+      ],
+      "correctOptionIndex": 2,
+      "explanation": "The __exit__ method receives exception information (type, value, traceback). Returning True from __exit__ suppresses the exception, while returning False (or None) allows it to propagate.",
+      "category": "Context Managers"
+    },
+    {
+      "id": "py-q8",
+      "question": "What is the result of the following dictionary comprehension in modern Python (3.7+)?",
+      "codeSnippet": "keys = ['a', 'b', 'c']\nvalues = [1, 2, 3]\nd = {k: v for k, v in zip(keys, values)}\nprint(list(d.keys()))",
+      "options": [
+        "['a', 'b', 'c'] in guaranteed insertion order",
+        "Keys sorted alphabetically regardless of insertion order",
+        "Arbitrary ordering because hash tables have no concept of sequence",
+        "A set of keys without predictable list indexing"
+      ],
+      "correctOptionIndex": 0,
+      "explanation": "Since Python 3.7, dictionaries are officially guaranteed by language specification to preserve insertion order, using a compact internal structure with an index array.",
+      "category": "Data Structures"
+    },
+    {
+      "id": "py-q9",
+      "question": "What does the '*' operator in a function definition signature signify?",
+      "codeSnippet": "def configure(host, port, *, timeout=30, retries=3):\n    pass",
+      "options": [
+        "All arguments following '*' must be passed strictly as keyword arguments.",
+        "It unpacks an arbitrary number of positional arguments into a tuple.",
+        "It marks the subsequent parameters as deprecated and optional.",
+        "It executes the function in a dedicated background worker process."
+      ],
+      "correctOptionIndex": 0,
+      "explanation": "A bare '*' in a function signature marks the end of positional parameters; any subsequent parameters can only be supplied as keyword arguments (e.g. timeout=10).",
+      "category": "Function Signatures"
+    },
+    {
+      "id": "py-q10",
+      "question": "How does Python's 'copy.deepcopy()' differ from a standard shallow copy ('copy.copy()')?",
+      "options": [
+        "Shallow copy duplicates only immutable primitives, while deepcopy works on functions.",
+        "Shallow copy constructs a new compound object and inserts references to existing child items, while deepcopy recursively copies all nested objects.",
+        "Deepcopy converts all objects into JSON strings before deserializing.",
+        "There is no difference for lists containing dictionaries."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "A shallow copy creates a new container but populates it with references to the original child items. Deep copy recursively duplicates all nested objects, preventing side-effect mutations on nested data.",
+      "category": "Memory & Object Model"
+    }
+  ]
+}

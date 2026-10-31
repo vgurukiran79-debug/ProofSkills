@@ -1,0 +1,6 @@
+{
+  "name": "ProofSkill",
+  "description": "Evidence-based skill passport platform for college students, freshers, and recruiters. Don't just claim your skills. Prove them.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

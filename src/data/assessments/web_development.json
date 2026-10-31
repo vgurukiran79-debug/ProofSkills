@@ -1,0 +1,145 @@
+{
+  "id": "assessment-web-development",
+  "title": "Modern Web Architecture & Protocols",
+  "skillName": "Web Development",
+  "category": "Web Development",
+  "durationMinutes": 15,
+  "passingScore": 70,
+  "difficulty": "Intermediate",
+  "description": "Evaluates browser critical rendering paths, event loop microtask queues, CORS security, HTTP caching, and modern React reconciliation.",
+  "topicsCovered": ["Critical Rendering Path", "JS Event Loop", "CORS & Web Security", "HTTP Caching & Headers", "Core Web Vitals"],
+  "questions": [
+    {
+      "id": "web-q1",
+      "question": "In the Browser Critical Rendering Path, what is the exact difference between 'Reflow' (Layout) and 'Repaint'?",
+      "options": [
+        "Reflow recalculates visual colors and shadows; Repaint calculates geometric positions and dimensions.",
+        "Reflow calculates exact physical geometry, width, and position of elements on screen; Repaint redraws individual pixels (colors, borders, backgrounds) without altering layout geometry.",
+        "Reflow is executed on the server, while Repaint runs in the browser thread.",
+        "Reflow only occurs when JavaScript encounters a syntax error."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Reflow (Layout) determines geometric dimensions and spatial coordinates for every render node. Repaint rasterizes visual styling (colors, visibility, shadows). Reflow always triggers a repaint, but paint-only CSS mutations (like background-color or transform) avoid costly reflows.",
+      "category": "Browser Internals"
+    },
+    {
+      "id": "web-q2",
+      "question": "What is the logged order of numbers in this JavaScript event loop execution?",
+      "codeSnippet": "console.log(1);\nsetTimeout(() => console.log(2), 0);\nPromise.resolve().then(() => console.log(3));\nconsole.log(4);",
+      "options": [
+        "1, 2, 3, 4",
+        "1, 4, 3, 2",
+        "1, 4, 2, 3",
+        "1, 3, 4, 2"
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Synchronous code runs first (1, 4). The microtask queue (Promise.then) is completely flushed before any macrotask (setTimeout callback) executes, so 3 logs before 2.",
+      "category": "JavaScript Event Loop"
+    },
+    {
+      "id": "web-q3",
+      "question": "When does a browser automatically dispatch a CORS Preflight 'OPTIONS' request prior to the actual HTTP request?",
+      "options": [
+        "For all GET requests without query parameters.",
+        "When the request is non-simple (e.g. methods like PUT/DELETE/PATCH, custom headers like Authorization, or Content-Type: application/json).",
+        "Only when the user opens DevTools in the browser.",
+        "Whenever the response status code is a 301 redirect."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Simple requests (GET, HEAD, POST with standard form content types) bypass preflight. Adding custom headers (e.g., Authorization), using application/json, or employing PUT/DELETE requires an OPTIONS preflight to verify server permission.",
+      "category": "Web Security & CORS"
+    },
+    {
+      "id": "web-q4",
+      "question": "What is the critical distinction between HTTP cache directives 'Cache-Control: no-cache' and 'Cache-Control: no-store'?",
+      "options": [
+        "'no-cache' allows storing the response in cache but requires validation with the origin server (ETag) before reuse; 'no-store' completely prohibits saving the response to any storage.",
+        "'no-cache' is only for images, while 'no-store' is only for HTML documents.",
+        "Both directives function identically in modern HTTP/2 and HTTP/3 browsers.",
+        "'no-store' allows browser caching for up to 300 seconds."
+      ],
+      "correctOptionIndex": 0,
+      "explanation": "'no-cache' instructs caches to store the response but forces revalidation with the origin server (using If-None-Match with ETag) before serving. 'no-store' prevents storing any part of the request or response in cache or disk, essential for sensitive credentials.",
+      "category": "HTTP Protocols"
+    },
+    {
+      "id": "web-q5",
+      "question": "Why are JWT session tokens typically safer when stored in an 'HttpOnly, Secure, SameSite=Strict' cookie compared to 'localStorage'?",
+      "options": [
+        "localStorage values expire automatically after 24 hours.",
+        "HttpOnly cookies cannot be read or stolen by malicious client-side JavaScript executing in Cross-Site Scripting (XSS) attacks.",
+        "localStorage does not support string serialization.",
+        "Cookies increase network bandwidth by compressing payload headers."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Any script injected via an XSS vulnerability can access window.localStorage and exfiltrate authentication tokens. An HttpOnly cookie is inaccessible to document.cookie in JavaScript, effectively neutralizing token theft via XSS.",
+      "category": "Web Security"
+    },
+    {
+      "id": "web-q6",
+      "question": "Why is utilizing array indexes as the 'key' prop in dynamic React lists strongly discouraged?",
+      "codeSnippet": "{items.map((item, index) => (\n  <TodoItem key={index} text={item.text} />\n))}",
+      "options": [
+        "It causes React to throw a fatal build error in production.",
+        "When list items are reordered, prepended, or removed, index keys break reconciliation, causing component state to bind to incorrect items and causing unnecessary DOM re-renders.",
+        "Array indexes force React to switch to synchronous rendering mode.",
+        "Key values must always be valid UUIDv4 strings."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "React keys identify which items have changed, been added, or removed. If the list order changes, using indices causes React to confuse element identity, preserving old uncontrolled input states on shifted rows.",
+      "category": "React Reconciliation"
+    },
+    {
+      "id": "web-q7",
+      "question": "Which Core Web Vital metric measures web page responsiveness and latency during user interactions (clicks, keyboard presses) throughout the session?",
+      "options": [
+        "LCP (Largest Contentful Paint)",
+        "CLS (Cumulative Layout Shift)",
+        "INP (Interaction to Next Paint)",
+        "FCP (First Contentful Paint)"
+      ],
+      "correctOptionIndex": 2,
+      "explanation": "INP (Interaction to Next Paint) replaced FID in 2024 as Google's official Core Web Vital evaluating overall responsiveness by assessing the latency of all user clicks, taps, and keypresses on a page.",
+      "category": "Web Performance"
+    },
+    {
+      "id": "web-q8",
+      "question": "What is the initial HTTP handshake status code returned by a WebSocket server to establish a persistent bidirectional connection?",
+      "options": [
+        "200 OK",
+        "101 Switching Protocols",
+        "204 No Content",
+        "307 Temporary Redirect"
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "A client initiates a WebSocket connection via an HTTP Upgrade request. If accepted, the server returns status 101 Switching Protocols with 'Upgrade: websocket', transitioning the underlying TCP socket to the WebSocket protocol.",
+      "category": "Protocols & WebSockets"
+    },
+    {
+      "id": "web-q9",
+      "question": "What CSS layout model is specifically engineered for 2-dimensional layouts controlling both columns and rows simultaneously?",
+      "options": [
+        "CSS Flexbox",
+        "CSS Grid",
+        "Inline Block Layout",
+        "Float and Clearfix Positioning"
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Flexbox is designed for 1-dimensional layouts (a single row OR column at a time). CSS Grid is a 2-dimensional grid system managing both horizontal rows and vertical columns concurrently.",
+      "category": "CSS Architecture"
+    },
+    {
+      "id": "web-q10",
+      "question": "What occurs when an unhandled Promise rejection occurs inside an async function in modern JavaScript?",
+      "options": [
+        "The browser halts all executing threads immediately.",
+        "The returned Promise enters a rejected state; in Node/modern browsers, an 'unhandledrejection' event fires if not caught with try-catch or .catch().",
+        "The engine silently retries the function 3 times.",
+        "The rejected value is coerced into undefined without error."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "An async function always returns a Promise. If an uncaught exception occurs inside, the Promise rejects with that error. If no caller attaches a catch handler, the runtime emits an unhandledrejection event.",
+      "category": "Asynchronous JavaScript"
+    }
+  ]
+}

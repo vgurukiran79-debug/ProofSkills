@@ -1,0 +1,143 @@
+{
+  "id": "assessment-ai-ml",
+  "title": "Artificial Intelligence & Machine Learning",
+  "skillName": "Artificial Intelligence and Machine Learning",
+  "category": "Artificial Intelligence and Machine Learning",
+  "durationMinutes": 15,
+  "passingScore": 70,
+  "difficulty": "Intermediate",
+  "description": "Tests machine learning mathematical foundations, neural network architectures, transformers, backpropagation, and optimization.",
+  "topicsCovered": ["Bias-Variance & Regularization", "Deep Learning & Activations", "Transformers & Self-Attention", "Model Evaluation & Metrics", "Ensembles & Optimization"],
+  "questions": [
+    {
+      "id": "aiml-q1",
+      "question": "In the Bias-Variance Tradeoff, what is the primary structural effect of increasing model complexity (e.g. adding high-degree polynomial features or deeper layers)?",
+      "options": [
+        "Bias increases while Variance decreases, causing systematic underfitting.",
+        "Bias decreases while Variance increases, making the model prone to overfitting on training noise.",
+        "Both Bias and Variance decrease simultaneously to zero.",
+        "Model complexity has no mathematical correlation with Variance."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "High model complexity fits training data tightly, lowering bias (training error) but elevating variance (generalization error on unseen validation sets) due to overfitting on noise.",
+      "category": "ML Theory"
+    },
+    {
+      "id": "aiml-q2",
+      "question": "What is the primary difference between L1 Regularization (Lasso) and L2 Regularization (Ridge)?",
+      "options": [
+        "L1 regularization penalizes the absolute sum of weights (|w|), driving irrelevant feature weights to exact zero and performing feature selection; L2 penalizes squared weights (w^2), shrinking weights smoothly toward zero without exact elimination.",
+        "L1 is only applicable to decision trees, while L2 is exclusive to neural networks.",
+        "L2 creates sparse weight vectors, whereas L1 preserves dense weights.",
+        "L1 eliminates the need for a learning rate in gradient descent."
+      ],
+      "correctOptionIndex": 0,
+      "explanation": "L1 (Lasso) penalty produces diamond-shaped constraint boundaries that intersect axes, producing sparse solutions with exact zeros (feature selection). L2 (Ridge) spherical constraints shrink weights evenly without driving them completely to zero.",
+      "category": "Regularization"
+    },
+    {
+      "id": "aiml-q3",
+      "question": "Why did Rectified Linear Unit (ReLU) largely replace the Sigmoid activation function in deep neural network hidden layers?",
+      "options": [
+        "Sigmoid produces negative values that crash matrix multiplication routines.",
+        "Sigmoid saturates at extreme values where its derivative approaches zero, causing the Vanishing Gradient problem during backpropagation in deep layers; ReLU maintains a constant gradient of 1 for positive inputs.",
+        "ReLU is a non-linear function that can only be evaluated on dedicated GPUs.",
+        "Sigmoid requires 100 times more parameters than ReLU."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "For inputs far from 0, the Sigmoid derivative sigma'(x) = sigma(x)(1 - sigma(x)) approaches 0. Multiplying small gradients across many layers via the chain rule causes gradients to vanish, stalling weight updates.",
+      "category": "Deep Learning"
+    },
+    {
+      "id": "aiml-q4",
+      "question": "When evaluating a disease detection or fraud classification model with extreme class imbalance (e.g. 99.9% negative, 0.1% positive), why is Accuracy a misleading metric?",
+      "options": [
+        "Accuracy cannot be calculated on binary labels.",
+        "A naive model predicting 'negative' for 100% of samples achieves 99.9% accuracy while failing to identify a single critical positive case; Precision, Recall, and PR-AUC are far more informative.",
+        "Accuracy is only valid if the dataset contains equal numbers of features.",
+        "Accuracy always underestimates true model capability."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "With severe class imbalance, predicting the majority class yields high trivial accuracy. Recall (True Positive Rate) and Precision (Positive Predictive Value), alongside F1-score and PR-AUC, evaluate how effectively positive cases are captured.",
+      "category": "Model Evaluation"
+    },
+    {
+      "id": "aiml-q5",
+      "question": "In the standard Transformer architecture (Vaswani et al.), what is the mathematical formula for Scaled Dot-Product Attention?",
+      "options": [
+        "softmax(Q * K * V) / sqrt(d_k)",
+        "softmax((Q * K^T) / sqrt(d_k)) * V",
+        "sigmoid(Q * K^T) + V",
+        "relu(Q * V^T) * K"
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Queries Q and Keys K are dot-multiplied to obtain similarity logits, scaled by sqrt(d_k) to prevent softmax gradients from vanishing with large dimensions, normalized via softmax, and multiplied by Values V.",
+      "category": "Transformers & LLMs"
+    },
+    {
+      "id": "aiml-q6",
+      "question": "What is the primary role of Pooling layers (e.g. Max Pooling) in Convolutional Neural Networks (CNNs)?",
+      "options": [
+        "To increase the color depth of input imagery.",
+        "To downsample spatial feature map dimensions, reducing parameters/computation while providing spatial translation invariance.",
+        "To replace fully connected layers at the end of the network.",
+        "To generate synthetic image data during training."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Max pooling downsamples spatial height and width by picking the dominant activation in each kernel window. This decreases computational parameters and provides robustness against small translations of features.",
+      "category": "Computer Vision & CNNs"
+    },
+    {
+      "id": "aiml-q7",
+      "question": "What mathematical principle powers the Backpropagation algorithm in neural networks?",
+      "options": [
+        "Euler's Totient Theorem",
+        "The Chain Rule of multivariable calculus for calculating partial derivatives of the loss function with respect to weights across layers.",
+        "The Central Limit Theorem of Gaussian distributions.",
+        "Monte Carlo random sampling."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Backpropagation recursively applies the Chain Rule backwards from the output loss through the computational graph to determine the gradient dL/dW for every trainable parameter in the network.",
+      "category": "Deep Learning Foundations"
+    },
+    {
+      "id": "aiml-q8",
+      "question": "What distinguishes the Adam optimizer from standard Stochastic Gradient Descent (SGD)?",
+      "options": [
+        "Adam computes exact Hessian second-order derivatives.",
+        "Adam combines Momentum (exponential moving average of past gradients) with RMSProp (exponential moving average of squared gradients) for adaptive per-parameter learning rates.",
+        "Adam eliminates the need for backpropagation entirely.",
+        "Adam requires batch size to equal total dataset size."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "Adam (Adaptive Moment Estimation) tracks both the first moment (mean of past gradients) and the second moment (uncentered variance of squared gradients) with bias corrections, adapting learning rates per parameter.",
+      "category": "Optimization"
+    },
+    {
+      "id": "aiml-q9",
+      "question": "What is the core distinction between Random Forest (Bagging) and Gradient Boosting (e.g. XGBoost)?",
+      "options": [
+        "Random Forest builds deep independent trees in parallel and averages predictions to reduce Variance; Gradient Boosting trains shallow trees sequentially, each learning to predict the residual errors of prior trees to reduce Bias.",
+        "Random Forest is for regression only, while Gradient Boosting is only for classification.",
+        "Gradient Boosting trains trees in parallel without sequential dependencies.",
+        "Random Forest requires neural network activations."
+      ],
+      "correctOptionIndex": 0,
+      "explanation": "Bagging (Bootstrap Aggregation in Random Forests) builds independent models in parallel from bootstrap samples, reducing variance. Boosting builds models sequentially where each weak learner corrects pseudo-residuals of predecessors, reducing bias.",
+      "category": "Ensemble Methods"
+    },
+    {
+      "id": "aiml-q10",
+      "question": "How does the 'Dropout' regularization technique function during neural network training?",
+      "options": [
+        "It removes 50% of the training dataset before every epoch.",
+        "It randomly deactivates (zeros out) a fraction p of hidden neuron activations during forward passes, preventing co-adaptation of features.",
+        "It permanently prunes dead weights after each epoch.",
+        "It resets model weights to zero if the loss stops decreasing."
+      ],
+      "correctOptionIndex": 1,
+      "explanation": "During training, Dropout randomly turns off neurons with probability p. This forces other units to learn redundant, generalized representations rather than co-depending on specific neighbor activations. At test time, all neurons are active with scaled weights.",
+      "category": "Neural Network Regularization"
+    }
+  ]
+}

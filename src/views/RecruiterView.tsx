@@ -149,7 +149,7 @@ Verified via ProofSkill Client Ledger Protocol v1.0
             {profile.projects.length} Audited Repos
           </div>
           <div className="text-[11px] text-slate-400 mt-1">
-            Avg coverage: {Math.round(profile.projects.reduce((acc, p) => acc + p.testCoveragePercent, 0) / (profile.projects.length || 1))}%
+            Avg coverage: {Math.round(profile.projects.reduce((acc, p) => acc + (p.testCoveragePercent || 0), 0) / (profile.projects.length || 1))}%
           </div>
         </div>
 

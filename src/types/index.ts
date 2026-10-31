@@ -1,5 +1,5 @@
 export type SkillLevel = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
-export type VerificationStatus = 'unverified' | 'assessment_passed' | 'project_backed' | 'recruiter_verified';
+export type VerificationStatus = 'self_reported' | 'assessment_completed' | 'project_evidence' | 'unverified' | 'assessment_passed' | 'project_backed' | 'recruiter_verified';
 export type SkillCategory = 'Frontend' | 'Backend' | 'Database' | 'DevOps' | 'Algorithms' | 'System Design' | 'AI / ML';
 
 export type AssessmentCategory =
@@ -45,15 +45,19 @@ export interface ProjectEvidence {
   tagline: string;
   description: string;
   category: string;
+  evidenceType: 'Full-Stack Application' | 'Backend & System Architecture' | 'Open Source Contribution' | 'Algorithms & Data Pipeline' | 'Independent Prototype' | string;
+  technologies: string[];
+  skillsDemonstrated: string[]; // skills demonstrated by this project
+  skillsProved: string[];
   githubUrl: string;
   liveUrl?: string;
-  skillsProved: string[]; // skill names
-  architectureNotes: string;
-  challengesSolved: string;
-  testCoveragePercent: number;
-  commitsCount: number;
+  imageUrl?: string; // project image or screenshot
+  architectureNotes?: string;
+  challengesSolved?: string;
+  testCoveragePercent?: number;
+  commitsCount?: number;
   completedDate: string;
-  artifacts: ProjectEvidenceArtifact[];
+  artifacts?: ProjectEvidenceArtifact[];
   verifiedByRecruiter?: boolean;
 }
 
@@ -102,10 +106,13 @@ export interface StudentProfile {
   id: string;
   passportId: string;
   name: string;
+  avatarUrl?: string;
   headline: string;
   bio: string;
   university: string;
+  college?: string; // college alias
   degree: string;
+  course?: string; // course alias
   graduationYear: string;
   location: string;
   email: string;
@@ -117,6 +124,7 @@ export interface StudentProfile {
   projects: ProjectEvidence[];
   assessmentResults: AssessmentResult[];
   verificationHash: string;
+  passportGeneratedDate?: string;
   isPublic: boolean;
   recruiterNotes?: {
     recruiterName: string;

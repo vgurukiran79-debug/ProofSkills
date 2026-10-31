@@ -25,10 +25,11 @@ export const ProfileView: React.FC = () => {
   // Profile Form State
   const [formData, setFormData] = useState({
     name: profile.name,
+    avatarUrl: profile.avatarUrl || '',
     headline: profile.headline,
     bio: profile.bio,
-    university: profile.university,
-    degree: profile.degree,
+    university: profile.college || profile.university,
+    degree: profile.course || profile.degree,
     graduationYear: profile.graduationYear,
     location: profile.location,
     email: profile.email,
@@ -80,7 +81,11 @@ export const ProfileView: React.FC = () => {
     e.preventDefault();
     if (!validateProfile()) return;
 
-    updateProfile(formData);
+    updateProfile({
+      ...formData,
+      college: formData.university,
+      course: formData.degree
+    });
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3000);
   };
@@ -143,7 +148,7 @@ export const ProfileView: React.FC = () => {
               <span>Personal & Professional Info</span>
             </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5">
                   Full Name <span className="text-red-400">*</span>
@@ -176,6 +181,20 @@ export const ProfileView: React.FC = () => {
                   placeholder="e.g. alex@university.edu"
                 />
                 {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Profile Photo URL (optional)
+                </label>
+                <input
+                  type="url"
+                  name="avatarUrl"
+                  value={formData.avatarUrl}
+                  onChange={handleChange}
+                  className="w-full rounded-lg border border-slate-800 bg-slate-950/60 px-3.5 py-2 text-sm text-white focus:outline-none focus:border-cyan-500 font-mono"
+                  placeholder="https://... photo link"
+                />
               </div>
             </div>
 

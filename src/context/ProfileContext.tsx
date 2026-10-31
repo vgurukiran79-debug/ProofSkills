@@ -54,15 +54,15 @@ export function calculateEvidenceScore(profile: StudentProfile): number {
     let projectPoints = 0;
     if (p.githubUrl) projectPoints += 2;
     if (p.liveUrl) projectPoints += 2;
-    if (p.testCoveragePercent >= 80) projectPoints += 2;
+    if (typeof p.testCoveragePercent === 'number' && p.testCoveragePercent >= 80) projectPoints += 2;
     if (p.artifacts && p.artifacts.length > 0) projectPoints += 3;
     score += Math.min(10, projectPoints);
   });
 
-  // Recruiter verification stamp (max 15 pts)
-  const hasRecruiterVerification = profile.projects.some(p => p.verifiedByRecruiter) || 
-    profile.skills.some(s => s.verificationStatus === 'recruiter_verified');
-  if (hasRecruiterVerification) {
+  // Comprehensive evidence backing (max 15 pts)
+  const hasStrongEvidence = profile.projects.length >= 2 || 
+    profile.skills.some(s => s.verificationStatus === 'project_evidence');
+  if (hasStrongEvidence) {
     score += 15;
   }
 
@@ -123,19 +123,23 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const addProject = (newProject: Omit<ProjectEvidence, 'id'>) => {
     const id = `proj-${Date.now()}`;
-    const projectWithId: ProjectEvidence = { ...newProject, id };
+    const projectWithId: ProjectEvidence = {
+      ...newProject,
+      id,
+      skillsDemonstrated: newProject.skillsDemonstrated || newProject.skillsProved || [],
+      skillsProved: newProject.skillsDemonstrated || newProject.skillsProved || []
+    };
     
     setProfile(prev => {
       // Automatically link skills tagged in this project
+      const demonstratedSkills = projectWithId.skillsDemonstrated || [];
       const updatedSkills: SkillItem[] = prev.skills.map(s => {
-        if (projectWithId.skillsProved.includes(s.name)) {
+        const isDemonstrated = demonstratedSkills.some(ds => ds.toLowerCase() === s.name.toLowerCase());
+        if (isDemonstrated) {
           const currentLinks = s.linkedProjectIds || [];
-          const status: VerificationStatus = s.verificationStatus === 'recruiter_verified' 
-            ? 'recruiter_verified' 
-            : 'project_backed';
           return {
             ...s,
-            verificationStatus: status,
+            verificationStatus: 'project_evidence' as VerificationStatus,
             linkedProjectIds: Array.from(new Set([...currentLinks, id]))
           };
         }
@@ -151,10 +155,29 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const updateProject = (id: string, updated: Partial<ProjectEvidence>) => {
-    setProfile(prev => ({
-      ...prev,
-      projects: prev.projects.map(p => (p.id === id ? { ...p, ...updated } : p))
-    }));
+    setProfile(prev => {
+      const updatedProjects = prev.projects.map(p => (p.id === id ? { ...p, ...updated } : p));
+      const demonstrated = updated.skillsDemonstrated || updated.skillsProved || [];
+
+      const updatedSkills: SkillItem[] = prev.skills.map(s => {
+        const isDemonstrated = demonstrated.some(ds => ds.toLowerCase() === s.name.toLowerCase());
+        if (isDemonstrated) {
+          const currentLinks = s.linkedProjectIds || [];
+          return {
+            ...s,
+            verificationStatus: 'project_evidence' as VerificationStatus,
+            linkedProjectIds: Array.from(new Set([...currentLinks, id]))
+          };
+        }
+        return s;
+      });
+
+      return {
+        ...prev,
+        projects: updatedProjects,
+        skills: updatedSkills
+      };
+    });
   };
 
   const deleteProject = (id: string) => {
